@@ -11,6 +11,23 @@ const baseUrl = `${API_URL}/${API_VERSION}`;
 const login = (data) => {
   return axios.post(`${baseUrl}/user/login`, data);
 };
+const register = (data) => {
+  return axios.post(`${baseUrl}/user/sign-up`, data);
+};
+const getUser = () => {
+  return axios.get(`${baseUrl}/user`);
+};
+const getAllConversations = () => {
+  return axios.get(`${baseUrl}/conversation`);
+};
+
+const getAllMessages = (id) => {
+  return axios.get(`${baseUrl}/message/${id}`);
+};
+
+const postMessage = (data) => {
+  return axios.post(`${baseUrl}/message`, data);
+};
 
 const logout = () => {
   storage.clearToken();
@@ -23,5 +40,10 @@ export const apiService = {
   //   return userSubject.value;
   // },
   login,
+  register,
   logout,
+  getUser,
+  getAllConversations,
+  getAllMessages,
+  postMessage,
 };
