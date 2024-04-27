@@ -1,13 +1,244 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  height: 100%;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+p {
+  margin-bottom: 0;
+}
+
+.full-height {
+  height: 100vh;
+}
+
+.primary-wrapper {
+  background-color: #f8f8f8cc;
+  padding: 35px;
+  border-radius: 5px;
+  width: 50%;
+  margin: auto;
+}
+
+.primary-wrapper h1,
+.primary-wrapper p {
+  text-transform: uppercase;
+}
+
+.primary-wrapper input {
+  padding: 10px 0px;
+  margin: 10px 0;
+  padding: 10px 20px;
+  margin: 10px 0;
+  width: 100%;
+  border: none;
+  border-radius: 5px;
+  background-color: #f1f1f1;
+}
+
+.button {
+  margin: 10px 0px;
+  padding: 10px 0px;
+  text-align: center;
+  text-transform: uppercase;
+  transition: 0.5s;
+  background-size: 200% auto;
+  color: white;
+  box-shadow: 0 0 20px #eee;
+  border-radius: 10px;
+  display: block;
+  width: 100%;
+  text-decoration: none;
+  border: none;
+}
+
+.primary-button {
+  background-image: linear-gradient(
+    to right,
+    #232526 0%,
+    #414345 51%,
+    #232526 100%
+  );
+}
+
+.primary-button:hover {
+  background-position: right center; /* change the direction of the change here */
+  color: #fff;
+  text-decoration: none;
+}
+
+.secondary-button {
+  background-image: linear-gradient(
+    to right,
+    #005c97 0%,
+    #363795 51%,
+    #005c97 100%
+  );
+}
+
+.secondary-button:hover {
+  background-position: right center; /* change the direction of the change here */
+  color: #fff;
+  text-decoration: none;
+}
+
+.profile-image-wrapper {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  overflow: hidden;
+  padding: 4px;
+  border: 1px solid #000;
+}
+
+.profile-image-wrapper img {
+  object-fit: cover;
+  object-position: center center;
+  border-radius: 50%;
+  height: 100%;
+  aspect-ratio: 1;
+}
+
+.user-card-wrapper {
+  height: 80vh;
+  overflow-y: scroll;
+}
+
+.user-card {
+  gap: 10px;
+  border-bottom: 1px solid #f1f1f1;
+  padding: 10px;
+}
+
+.conversation-list-card {
+  border-right: 1px solid #f3f3f3;
+}
+
+.all-messages {
+  --recieved-color: #e5e5ea;
+  --sent-color: #0b93f6;
+  background: white;
+  height: 67vh;
+  overflow-y: scroll;
+}
+
+.messages-wrapper {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+}
+
+.message {
+  align-self: flex-start;
+  position: relative;
+  max-width: 80%;
+  margin: 0.25rem;
+  padding: 0.75rem 1rem;
+  background: var(--recieved-color);
+  border-radius: 1rem;
+}
+
+.to {
+  color: #ffffff;
+  background: var(--sent-color);
+  align-self: flex-end;
+}
+
+.message:after {
+  content: "";
+  height: 30px;
+  width: 20px;
+  position: absolute;
+  bottom: 6px;
+  left: -17px;
+  box-shadow: 7px 5px 0 1px var(--recieved-color);
+  border-radius: 10px;
+}
+
+.message.to:after {
+  left: auto;
+  right: -17px;
+  box-shadow: -7px 5px 0 1px var(--sent-color);
+}
+
+.nib-ios-typing {
+  font-size: 50px;
+  line-height: 20px;
+}
+.nib-ios-typing span {
+  background: -webkit-linear-gradient(45deg, #eee, #333);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.nib-ios-typing:before,
+.nib-ios-typing:after {
+  content: "";
+  display: block;
+  height: 15px;
+  width: 15px;
+  position: absolute;
+  bottom: 0;
+  left: -5px;
+  background: var(--recieved-color);
+  border-radius: 10px;
+}
+
+.nib-ios-typing:before {
+  height: 7px;
+  width: 7px;
+  bottom: -5px;
+  left: -12px;
+}
+.send-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.send-wrapper input {
+  padding: 10px 0px;
+  margin: 10px 0;
+  padding: 10px 20px;
+  margin: 10px 0;
+  width: 100%;
+  border: none;
+  border-radius: 5px;
+  background-color: #f1f1f1;
+}
+
+.send-button {
+  background-image: linear-gradient(
+    to right,
+    #cb2d3e 0%,
+    #ef473a 51%,
+    #cb2d3e 100%
+  );
+  margin: 10px;
+  padding: 10px 30px;
+  text-align: center;
+  text-transform: uppercase;
+  transition: 0.5s;
+  background-size: 200% auto;
+  color: white;
+  box-shadow: 0 0 20px #eee;
+  border-radius: 10px;
+  display: block;
+  text-decoration: none;
+  border: none;
+}
+
+.send-button:hover {
+  background-position: right center; /* change the direction of the change here */
+  color: #fff;
+  text-decoration: none;
 }
