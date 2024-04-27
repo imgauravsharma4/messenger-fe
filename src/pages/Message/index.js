@@ -79,7 +79,7 @@ const MessagePage = () => {
       });
   };
   useEffect(() => {
-    socketConnection();
+    // socketConnection();
     getAllConversations();
     getUser();
   }, []);
