@@ -1,11 +1,11 @@
 import React from "react";
 
-const UserCard = ({ conversation, user, handleClick }) => {
+const UserCard = ({ conversation, user, handleClick, index }) => {
   const handleOnClick = () => {
     handleClick(conversation);
   };
   return (
-    <div>
+    <div key={`index${index}`}>
       <div
         className='d-flex align-items-center user-card'
         onClick={handleOnClick}
