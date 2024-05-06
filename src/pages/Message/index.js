@@ -69,10 +69,16 @@ const MessagePage = () => {
       user.id === selectedChat.senderId
         ? selectedChat.receiverId
         : selectedChat.senderId;
+    payload.senderId =
+      user.id !== selectedChat.senderId
+        ? selectedChat.receiverId
+        : selectedChat.senderId;
+    payload.conversationId = selectedChat.id;
     return apiService
       .postMessage(payload)
       .then((res) => {
         reset();
+        socket.emit("sendMessage", payload);
       })
       .catch((error) => {
         console.log("Error", error);
@@ -85,12 +91,23 @@ const MessagePage = () => {
   }, []);
 
   useEffect(() => {
-    if (selectedChat) {
-      console.log("selectedChat", selectedChat);
+    if (user) {
+      socket?.emit("addUsers", user.id);
+    }
+    socket?.on("getUsers", (users) => {
+      console.log("users", users);
+    });
+    socket?.on("getMessage", (data) => {
+      setMessages((prev) => [...prev, data]);
+    });
+  }, [socket, user]);
 
+  useEffect(() => {
+    if (selectedChat) {
       getAllMessages(selectedChat.id);
     }
   }, [selectedChat]);
+
   return (
     <UserProvider>
       <div>
@@ -103,8 +120,9 @@ const MessagePage = () => {
                   <div className='user-card-wrapper'>
                     {allConversations &&
                       allConversations.length > 0 &&
-                      allConversations.map((item) => (
+                      allConversations.map((item, index) => (
                         <UserCard
+                          index={index}
                           conversation={item}
                           user={user}
                           handleClick={handleClickConversation}
@@ -131,7 +149,6 @@ const MessagePage = () => {
                               }
                             />
                           ))}
-                        {/* <Message message={"Hi"} classes={"to"} /> */}
                       </div>
                     </div>
                   </div>
