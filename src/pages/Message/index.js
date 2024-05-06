@@ -21,6 +21,7 @@ const MessagePage = () => {
   const [user, setUser] = useState(null);
   const [selectedChat, setSelectedChat] = useState(null);
   const [showMessage, setShowMessage] = useState(false);
+  const [isReceived, setIsReceived] = useState(false);
   const [messages, setMessages] = useState([]);
   const socketConnection = () => {
     socket.on("connect", () => {
@@ -79,6 +80,8 @@ const MessagePage = () => {
       .then((res) => {
         reset();
         socket.emit("sendMessage", payload);
+        console.log("sent");
+        setIsReceived(!isReceived);
       })
       .catch((error) => {
         console.log("Error", error);
@@ -102,6 +105,14 @@ const MessagePage = () => {
     });
   }, [socket, user]);
 
+  // useEffect(() => {
+  //   socket?.on("getMessage", (data) => {
+  //     console.log("inside", data);
+  //     setMessages((prev) => [...prev, data]);
+  //   });
+  // }, [socket, isReceived]);
+
+  console.log("messages", messages.length);
   useEffect(() => {
     if (selectedChat) {
       getAllMessages(selectedChat.id);
