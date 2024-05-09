@@ -30,7 +30,7 @@ p {
 }
 
 .primary-wrapper h1,
-.primary-wrapper p {
+.primary-wrapper > p {
   text-transform: uppercase;
 }
 

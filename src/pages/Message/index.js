@@ -11,11 +11,18 @@ import { useForm } from "react-hook-form";
 
 const MessagePage = () => {
   const validationSchema = Yup.object().shape({
-    message: Yup.string().required("Message cannot be empty"),
+    message: Yup.string()
+      .required("Message cannot be empty")
+      .max(200, "Character should be less than 200"),
   });
 
   const formOptions = { resolver: yupResolver(validationSchema) };
-  const { register, handleSubmit, reset } = useForm(formOptions);
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm(formOptions);
   const socket = io(API_URL);
   const [allConversations, setAllConversations] = useState([]);
   const [user, setUser] = useState(null);
@@ -23,11 +30,7 @@ const MessagePage = () => {
   const [showMessage, setShowMessage] = useState(false);
   const [isReceived, setIsReceived] = useState(false);
   const [messages, setMessages] = useState([]);
-  const socketConnection = () => {
-    socket.on("connect", () => {
-      console.log("CONNECTEDD");
-    });
-  };
+
   const getAllConversations = async () => {
     return apiService
       .getAllConversations()
@@ -88,10 +91,12 @@ const MessagePage = () => {
       });
   };
   useEffect(() => {
-    socketConnection();
+    socket.on("connect", () => {
+      console.log("CONNECTEDD");
+    });
     getAllConversations();
     getUser();
-  }, []);
+  }, [socket]);
 
   useEffect(() => {
     if (user) {
@@ -104,13 +109,6 @@ const MessagePage = () => {
       setMessages((prev) => [...prev, data]);
     });
   }, [socket, user]);
-
-  // useEffect(() => {
-  //   socket?.on("getMessage", (data) => {
-  //     console.log("inside", data);
-  //     setMessages((prev) => [...prev, data]);
-  //   });
-  // }, [socket, isReceived]);
 
   console.log("messages", messages.length);
   useEffect(() => {
@@ -171,10 +169,19 @@ const MessagePage = () => {
                         placeholder='write message'
                         {...register("message")}
                       />
-                      <button type='submit' className='send-button'>
+                      <button
+                        type='submit'
+                        className='send-button'
+                        disabled={errors?.message ? true : false}
+                      >
                         Send
                       </button>
                     </div>
+                    {errors?.message && (
+                      <span class='text-danger text-capatalize'>
+                        {errors?.message?.message}
+                      </span>
+                    )}
                   </form>
                 </>
               )}
