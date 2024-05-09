@@ -8,7 +8,8 @@ const UserCard = ({ conversation, user, handleClick, index }) => {
     <div key={`index${index}`}>
       <div
         className='d-flex align-items-center user-card'
-        onClick={handleOnClick}
+        onClick={handleClick ? handleOnClick : undefined}
+        // onClick={handleOnClick}
       >
         <div className='profile-image-wrapper'>
           <img
@@ -19,8 +20,8 @@ const UserCard = ({ conversation, user, handleClick, index }) => {
         <div>
           <p>
             {user?.id === conversation?.receiverId
-              ? conversation?.sender?.firstName
-              : conversation?.receiver?.firstName}
+              ? conversation?.sender?.fullName
+              : conversation?.receiver?.fullName}
           </p>
         </div>
       </div>

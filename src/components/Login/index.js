@@ -12,11 +12,19 @@ const Login = () => {
   const validationSchema = Yup.object().shape({
     email: Yup.string()
       .required("Email address is required")
+      .max(200, "Character should be less than 200")
       .matches(OPTIONS.emailPattern, "Enter a valid email address"),
+    password: Yup.string()
+      .required("Password is required")
+      .max(200, "Character should be less than 200"),
   });
 
   const formOptions = { resolver: yupResolver(validationSchema) };
-  const { register, handleSubmit } = useForm(formOptions);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm(formOptions);
   const onSubmit = async (payload) => {
     return await apiService
       .login(payload)
@@ -29,10 +37,10 @@ const Login = () => {
       });
   };
   return (
-    <div className='container text-center'>
+    <div className='container'>
       <div className='primary-wrapper'>
-        <h1>Login</h1>
-        <p>Hi, Welcome Back 👋</p>
+        <h1 className='text-center'>Login</h1>
+        <p className='text-center'>Hi, Welcome Back 👋</p>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div>
             <input
@@ -41,6 +49,11 @@ const Login = () => {
               placeholder='Email'
               {...register("email")}
             />
+            {errors?.email && (
+              <span class='text-danger text-capatalize'>
+                {errors?.email?.message}
+              </span>
+            )}
           </div>
           <div>
             <input
@@ -48,6 +61,11 @@ const Login = () => {
               placeholder='Password'
               {...register("password")}
             />
+            {errors?.password && (
+              <span class='text-danger text-capatalize'>
+                {errors?.password?.message}
+              </span>
+            )}
           </div>
           <div>
             <button type='submit' className='primary-button button'>

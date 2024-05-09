@@ -11,7 +11,17 @@ const Signup = () => {
   const validationSchema = Yup.object().shape({
     email: Yup.string()
       .required("Email address is required")
+      .max(200, "Character should be less than 200")
       .matches(OPTIONS.emailPattern, "Enter a valid email address"),
+    password: Yup.string()
+      .required("Password is required")
+      .max(200, "Character should be less than 200"),
+    userName: Yup.string()
+      .required("Username is required")
+      .max(200, "Character should be less than 200"),
+    fullName: Yup.string()
+      .required("Fullname is required")
+      .max(200, "Character should be less than 200"),
   });
 
   const formOptions = { resolver: yupResolver(validationSchema) };
@@ -30,10 +40,10 @@ const Signup = () => {
       });
   };
   return (
-    <div className='container text-center'>
+    <div className='container'>
       <div className='primary-wrapper'>
-        <h1>Signup</h1>
-        <p>Hi, Welcome 👋</p>
+        <h1 className='text-center'>Signup</h1>
+        <p className='text-center'>Hi, Welcome 👋</p>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div>
             <input
@@ -42,6 +52,11 @@ const Signup = () => {
               placeholder='Email'
               {...register("email")}
             />
+            {errors?.email && (
+              <span class='text-danger text-capatalize'>
+                {errors?.email?.message}
+              </span>
+            )}
           </div>
           <div>
             <input
@@ -49,13 +64,23 @@ const Signup = () => {
               placeholder='Username'
               {...register("userName")}
             />
+            {errors?.userName && (
+              <span class='text-danger text-capatalize'>
+                {errors?.userName?.message}
+              </span>
+            )}
           </div>
           <div>
             <input
               type='text'
               placeholder='Fullname'
-              {...register("firstName")}
+              {...register("fullName")}
             />
+            {errors?.fullName && (
+              <span class='text-danger text-capatalize'>
+                {errors?.fullName?.message}
+              </span>
+            )}
           </div>
           <div>
             <input
@@ -63,12 +88,21 @@ const Signup = () => {
               placeholder='Password'
               {...register("password")}
             />
+            {errors?.password && (
+              <span class='text-danger text-capatalize'>
+                {errors?.password?.message}
+              </span>
+            )}
           </div>
           <div>
-            <button type='submit' className="button primary-button">Signup</button>
+            <button type='submit' className='button primary-button'>
+              Signup
+            </button>
           </div>
         </form>
-        <Link to='/login' className="button secondary-button">Login</Link>
+        <Link to='/login' className='button secondary-button'>
+          Login
+        </Link>
       </div>
     </div>
   );
