@@ -21,7 +21,7 @@ const UserProvider = ({ children }) => {
         setIsAuth(false);
       }
       const res = await apiService.getUser();
-      if (res.data) {
+      if (res) {
         setIsAuth(true);
         setUser(res);
       }

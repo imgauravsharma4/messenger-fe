@@ -33,6 +33,9 @@ const logout = () => {
   storage.clearToken();
   // Router.push("/");
 };
+const getUserWithUsername = (data) => {
+  return axios.get(`${baseUrl}/user/${data}`);
+};
 
 export const apiService = {
   // user: userSubject.asObservable(),
@@ -46,4 +49,5 @@ export const apiService = {
   getAllConversations,
   getAllMessages,
   postMessage,
+  getUserWithUsername,
 };
