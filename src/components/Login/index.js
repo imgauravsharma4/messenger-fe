@@ -50,7 +50,7 @@ const Login = () => {
               {...register("email")}
             />
             {errors?.email && (
-              <span class='text-danger text-capatalize'>
+              <span className='text-danger text-capatalize'>
                 {errors?.email?.message}
               </span>
             )}
@@ -62,7 +62,7 @@ const Login = () => {
               {...register("password")}
             />
             {errors?.password && (
-              <span class='text-danger text-capatalize'>
+              <span className='text-danger text-capatalize'>
                 {errors?.password?.message}
               </span>
             )}

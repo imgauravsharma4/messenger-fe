@@ -1,14 +1,18 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "components/Navbar/Navbar";
 import { useUserContext } from "providers/UserProvider";
 
 const Layout = ({ children }) => {
   const { isAuth, user } = useUserContext();
-  console.log("object", user);
+  const [authenticated, setIsAuthenticated] = useState(isAuth);
+  console.log("user", isAuth, user);
+  useEffect(() => {
+    setIsAuthenticated(isAuth);
+  }, [isAuth]);
   return (
     <div>
       <main className='d-flex'>
-        {isAuth && <Navbar />}
+        {authenticated && <Navbar />}
         <div className='w-100'>{children}</div>
       </main>
     </div>

@@ -10,6 +10,7 @@ import {
   faCircleCheck,
   faCircleXmark,
 } from "@fortawesome/free-regular-svg-icons";
+import storage from "utils/storage";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -46,6 +47,9 @@ const Signup = () => {
       .register(data)
       .then((res) => {
         navigate("/");
+        console.log('res', res.data);
+        storage.setToken(res.data.token);
+
       })
       .catch((error) => {
         console.log("errr", error);

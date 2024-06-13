@@ -376,14 +376,25 @@ p {
   visibility: hidden;
 }
 
-.post-wrapper:hover .overlay{
+.post-wrapper:hover .overlay {
   visibility: visible;
 }
-.post-wrapper .overlay .item{
+.post-wrapper .overlay .item {
   padding: 0px 10px;
 }
-.post-wrapper .overlay .item svg{
+.post-wrapper .overlay .item svg {
   padding: 0px 8px;
+}
+
+.user-profile-picture{
+  border-radius: 50%;
+  overflow: hidden;
+}
+.user-profile-picture img {
+  object-fit: cover;
+  object-position: center center;
+  width: 100%;
+  height: 100%;
 }
 @keyframes rotation {
   0% {

@@ -3,15 +3,20 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PostModal from "components/Models/PostModal";
 import Post from "components/Posts/Post";
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const ProfilePage = () => {
   const [open, setOpen] = useState(false);
   const [data, setData] = useState(false);
+  const navigate = useNavigate();
 
   const handleModalOpen = (data) => {
     console.log("item", data);
     setData(data);
     setOpen(true);
+  };
+  const handleEditProfile = () => {
+    navigate("/edit-profile");
   };
   return (
     <div className='mt-5'>
@@ -29,7 +34,12 @@ const ProfilePage = () => {
           <div className='col-xl-7 col-lg-7 col-md-6 col-sm-12'>
             <div className='profile-top-section'>
               <p className='username'>username</p>
-              <button className='tertiary-button button'>Edit Profile</button>
+              <button
+                className='tertiary-button button'
+                onClick={handleEditProfile}
+              >
+                Edit Profile
+              </button>
               <span>
                 <FontAwesomeIcon icon={faGear} />
               </span>
@@ -52,10 +62,10 @@ const ProfilePage = () => {
           </div>
           <div className='col-xl-12 col-lg-12 col-md-12 col-sm-12'>
             <div className='tab-wrapper'>
-              <ul class='nav nav-pills mb-3' id='pills-tab' role='tablist'>
-                <li class='nav-item' role='presentation'>
+              <ul className='nav nav-pills mb-3' id='pills-tab' role='tablist'>
+                <li className='nav-item' role='presentation'>
                   <button
-                    class='nav-link active'
+                    className='nav-link active'
                     id='pills-home-tab'
                     data-bs-toggle='pill'
                     data-bs-target='#pills-home'
@@ -67,9 +77,9 @@ const ProfilePage = () => {
                     Post
                   </button>
                 </li>
-                <li class='nav-item' role='presentation'>
+                <li className='nav-item' role='presentation'>
                   <button
-                    class='nav-link'
+                    className='nav-link'
                     id='pills-profile-tab'
                     data-bs-toggle='pill'
                     data-bs-target='#pills-profile'
@@ -81,9 +91,9 @@ const ProfilePage = () => {
                     Saved
                   </button>
                 </li>
-                <li class='nav-item' role='presentation'>
+                <li className='nav-item' role='presentation'>
                   <button
-                    class='nav-link'
+                    className='nav-link'
                     id='pills-contact-tab'
                     data-bs-toggle='pill'
                     data-bs-target='#pills-contact'
@@ -97,13 +107,13 @@ const ProfilePage = () => {
                 </li>
               </ul>
             </div>
-            <div class='tab-content' id='pills-tabContent'>
+            <div className='tab-content' id='pills-tabContent'>
               <div
-                class='tab-pane fade show active'
+                className='tab-pane fade show active'
                 id='pills-home'
                 role='tabpanel'
                 aria-labelledby='pills-home-tab'
-                tabindex='0'
+                tabIndex='0'
               >
                 <div className='row'>
                   {[1, 2, 3, 4, 5, 6, 7].map((item) => (
@@ -111,24 +121,24 @@ const ProfilePage = () => {
                       <Post item={item} handleClick={handleModalOpen} />
                     </div>
                   ))}
-                  <PostModal setOpen={setOpen} open={open} data={data}/>
+                  <PostModal setOpen={setOpen} open={open} data={data} />
                 </div>
               </div>
               <div
-                class='tab-pane fade'
+                className='tab-pane fade'
                 id='pills-profile'
                 role='tabpanel'
                 aria-labelledby='pills-profile-tab'
-                tabindex='0'
+                tabIndex='0'
               >
                 saved
               </div>
               <div
-                class='tab-pane fade'
+                className='tab-pane fade'
                 id='pills-contact'
                 role='tabpanel'
                 aria-labelledby='pills-contact-tab'
-                tabindex='0'
+                tabIndex='0'
               >
                 Tagged
               </div>

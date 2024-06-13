@@ -1,15 +1,15 @@
 import UserCard from "components/Messages/UserCard";
-import React, { useEffect, useState } from "react";
-import { io } from "socket.io-client";
-import { API_URL } from "utils/variables";
+import React, { useCallback, useEffect, useState } from "react";
 import Message from "components/Messages/Message";
 import { apiService } from "services";
-import UserProvider from "providers/UserProvider";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
+import { useSocket } from "providers/SocketProvider";
 
 const MessagePage = () => {
+  const { socket } = useSocket();
+
   const validationSchema = Yup.object().shape({
     message: Yup.string()
       .required("Message cannot be empty")
@@ -23,7 +23,6 @@ const MessagePage = () => {
     reset,
     formState: { errors },
   } = useForm(formOptions);
-  const socket = io(API_URL);
   const [allConversations, setAllConversations] = useState([]);
   const [user, setUser] = useState(null);
   const [selectedChat, setSelectedChat] = useState(null);
@@ -41,16 +40,17 @@ const MessagePage = () => {
         console.log("Error", error);
       });
   };
-  const getUser = async () => {
+  const getUser = useCallback(async () => {
     return apiService
       .getUser()
       .then((res) => {
         setUser(res);
+        socket.emit("addUsers", res.id);
       })
       .catch((error) => {
         console.log("Error", error);
       });
-  };
+  }, [socket]);
 
   const handleClickConversation = async (item) => {
     setShowMessage(true);
@@ -91,24 +91,24 @@ const MessagePage = () => {
       });
   };
   useEffect(() => {
-    socket.on("connect", () => {
-      console.log("CONNECTEDD");
-    });
     getAllConversations();
     getUser();
-  }, [socket]);
+  }, [getUser]);
 
+  const handleGetMessages = useCallback((data) => {
+    setMessages((prev) => [...prev, data]);
+  }, []);
+  const handleGetUsers = useCallback((users) => {
+    console.log("users", users);
+  }, []);
   useEffect(() => {
-    if (user) {
-      socket?.emit("addUsers", user.id);
-    }
-    socket?.on("getUsers", (users) => {
-      console.log("users", users);
-    });
-    socket?.on("getMessage", (data) => {
-      setMessages((prev) => [...prev, data]);
-    });
-  }, [socket, user]);
+    socket.on("getUsers", handleGetUsers);
+    socket.on("getMessage", handleGetMessages);
+    return () => {
+      socket.off("getUsers", handleGetUsers);
+      socket.off("getMessage", handleGetMessages);
+    };
+  }, [handleGetMessages, handleGetUsers, socket, user, isReceived]);
 
   console.log("messages", messages.length);
   useEffect(() => {
@@ -118,78 +118,74 @@ const MessagePage = () => {
   }, [selectedChat]);
 
   return (
-    <UserProvider>
-      <div>
-        <div className='container-fluid'>
-          <div className='row'>
-            <div className='col-xl-4 col-lg-4 col-md-6 col-sm-12'>
-              <div>
-                <div className='conversation-list-card'>
-                  <h1>Chats</h1>
-                  <div className='user-card-wrapper'>
-                    {allConversations &&
-                      allConversations.length > 0 &&
-                      allConversations.map((item, index) => (
-                        <UserCard
-                          index={index}
-                          conversation={item}
-                          user={user}
-                          handleClick={handleClickConversation}
-                        />
-                      ))}
-                  </div>
+    <div>
+      <div className='container-fluid'>
+        <div className='row'>
+          <div className='col-xl-4 col-lg-4 col-md-6 col-sm-12'>
+            <div>
+              <div className='conversation-list-card'>
+                <h1>Chats</h1>
+                <div className='user-card-wrapper'>
+                  {allConversations &&
+                    allConversations.length > 0 &&
+                    allConversations.map((item, index) => (
+                      <UserCard
+                        index={index}
+                        conversation={item}
+                        user={user}
+                        handleClick={handleClickConversation}
+                      />
+                    ))}
                 </div>
               </div>
             </div>
-            <div className='col-xl-8 col-lg-8 col-md-6 col-sm-12'>
-              {showMessage && (
-                <>
-                  <div className='message-box'>
-                    <UserCard conversation={selectedChat} user={user} />
-                    <div className='all-messages'>
-                      <div className='messages-wrapper'>
-                        {messages &&
-                          messages.length > 0 &&
-                          messages.map((item) => (
-                            <Message
-                              message={item.message}
-                              classes={
-                                user?.id === item.senderId ? "to" : "from"
-                              }
-                            />
-                          ))}
-                      </div>
+          </div>
+          <div className='col-xl-8 col-lg-8 col-md-6 col-sm-12'>
+            {showMessage && (
+              <>
+                <div className='message-box'>
+                  <UserCard conversation={selectedChat} user={user} />
+                  <div className='all-messages'>
+                    <div className='messages-wrapper'>
+                      {messages &&
+                        messages.length > 0 &&
+                        messages.map((item) => (
+                          <Message
+                            message={item.message}
+                            classes={user?.id === item.senderId ? "to" : "from"}
+                          />
+                        ))}
                     </div>
                   </div>
-                  <form onSubmit={handleSubmit(onSubmit)}>
-                    <div className='send-wrapper'>
-                      <input
-                        type='text'
-                        name='message'
-                        placeholder='write message'
-                        {...register("message")}
-                      />
-                      <button
-                        type='submit'
-                        className='send-button'
-                        disabled={errors?.message ? true : false}
-                      >
-                        Send
-                      </button>
-                    </div>
-                    {errors?.message && (
-                      <span class='text-danger text-capatalize'>
-                        {errors?.message?.message}
-                      </span>
-                    )}
-                  </form>
-                </>
-              )}
-            </div>
+                </div>
+                <form onSubmit={handleSubmit(onSubmit)}>
+                  <div className='send-wrapper'>
+                    <input
+                      type='text'
+                      name='message'
+                      placeholder='write message'
+                      {...register("message")}
+                    />
+                    <button
+                      type='submit'
+                      className='send-button'
+                      disabled={errors?.message ? true : false}
+                    >
+                      Send
+                    </button>
+                  </div>
+                  {errors?.message && (
+                    <span className='text-danger text-capatalize'>
+                      {errors?.message?.message}
+                    </span>
+                  )}
+                </form>
+              </>
+            )}
           </div>
         </div>
       </div>
-    </UserProvider>
+    </div>
   );
 };
 

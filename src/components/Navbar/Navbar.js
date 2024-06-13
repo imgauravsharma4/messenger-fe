@@ -41,8 +41,8 @@ const Navbar = () => {
       <ul>
         {menu &&
           menu.length > 0 &&
-          menu.map((item) => (
-            <li>
+          menu.map((item, index) => (
+            <li key={`a${index}`}>
               <Link to={item.path}>
                 <span>
                   <FontAwesomeIcon icon={item.icon} />
